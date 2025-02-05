@@ -63,7 +63,7 @@ const getRoute = async (path: string, channelId?: string) => {
     fetchOptions: { next: { revalidate } },
     channelId,
   });
-
+  const data = response.data as any;
   return response.data.site.route;
 };
 
@@ -84,6 +84,7 @@ const getRawWebPageContent = async (id: string) => {
     variables: { id },
   });
 
+  const data = response.data as any;
   const node = response.data.node;
 
   if (node?.__typename !== 'RawHtmlPage') {
@@ -104,12 +105,13 @@ const GetStoreStatusQuery = graphql(`
 `);
 
 const getStoreStatus = async (channelId?: string) => {
-  const { data } = await client.fetch({
+  const response = await client.fetch({
     document: GetStoreStatusQuery,
     fetchOptions: { next: { revalidate: 300 } },
     channelId,
   });
 
+  const data = response.data as any;
   return data.site.settings?.status;
 };
 
