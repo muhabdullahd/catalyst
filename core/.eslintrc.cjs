@@ -3,7 +3,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 require('@bigcommerce/eslint-config/patch');
 
-/** @type {import('eslint').Linter.Config} */
+/** @type {import('eslint').ESLint.ConfigData & { root: boolean }} */
 const config = {
   root: true,
   extends: [
