@@ -63,7 +63,7 @@ const getRoute = async (path: string, channelId?: string) => {
     fetchOptions: { next: { revalidate } },
     channelId,
   });
-  const data = response.data as any;
+
   return response.data.site.route;
 };
 
@@ -84,8 +84,14 @@ const getRawWebPageContent = async (id: string) => {
     variables: { id },
   });
 
-  const data = response.data as any;
-  const node = response.data.node;
+  const data = response.data as {
+    node: {
+      __typename: string;
+      htmlBody?: string;
+    } | null;
+  };
+
+  const node = data.node;
 
   if (node?.__typename !== 'RawHtmlPage') {
     throw new Error('Failed to fetch raw web page content');
@@ -111,7 +117,14 @@ const getStoreStatus = async (channelId?: string) => {
     channelId,
   });
 
-  const data = response.data as any;
+  const data = response.data as {
+    site: {
+      settings?: {
+        status: StorefrontStatusType;
+      };
+    };
+  };
+  
   return data.site.settings?.status;
 };
 
