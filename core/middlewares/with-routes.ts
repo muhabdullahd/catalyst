@@ -84,14 +84,7 @@ const getRawWebPageContent = async (id: string) => {
     variables: { id },
   });
 
-  const data = response.data as {
-    node: {
-      __typename: string;
-      htmlBody?: string;
-    } | null;
-  };
-
-  const node = data.node;
+  const node = response.data.node;
 
   if (node?.__typename !== 'RawHtmlPage') {
     throw new Error('Failed to fetch raw web page content');
@@ -111,20 +104,12 @@ const GetStoreStatusQuery = graphql(`
 `);
 
 const getStoreStatus = async (channelId?: string) => {
-  const response = await client.fetch({
+  const { data } = await client.fetch({
     document: GetStoreStatusQuery,
     fetchOptions: { next: { revalidate: 300 } },
     channelId,
   });
 
-  const data = response.data as {
-    site: {
-      settings?: {
-        status: StorefrontStatusType;
-      };
-    };
-  };
-  
   return data.site.settings?.status;
 };
 
